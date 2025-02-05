@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('../layout/head.ejs', {pageTitle: 'Danh sách quyền hạn'}) %>
+<body>
+    <div class="container mb-5">
+        <%- include('../layout/navbar.ejs') %>
+        <div class="card mt-2">
+            <div class="card-header d-flex align-items-center justify-content-between mb-4">
+                <h1>Role List</h1>
+                <a href="#" class="btn btn-primary">
+                    <i class="fa-solid fa-circle-plus"></i> New
+                </a>
+            </div>
+
+            <div class="card-body p4">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% roles.forEach(role => { %>
+                                <tr>
+                                    <td><%= role.id %></td>
+                                    <td><%= role.name %></td>
+                                    <td class="text-center">
+                                        <a href="#" class="btn btn-outline-warning btn-sm me-1">
+                                            <i class="fa-solid fa-pen-to-square"></i> Sửa
+                                        </a>
+                                        <a href="#" class="btn btn-outline-danger btn-sm me-1" onclick="return confirm('Bạn có chắc muốn xóa quyền này?');">
+                                            <i class="fa-solid fa-trash"></i> Xóa
+                                        </a>
+                                        <a href="#" class="btn btn-outline-info btn-sm">
+                                            <i class="fa-solid fa-circle-info"></i> Chi tiết
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

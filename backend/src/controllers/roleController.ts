@@ -6,7 +6,7 @@ class RoleController{
     static async index(req: Request, res: Response){
         try {
             const role: Role[] = await RoleService.getAllRole();
-            res.render('roles/index',{ role: role });
+            res.render('roles/list',{ roles: role });
         } catch (error) {
             console.log(error);
             res.status(500).send('Server Error');
