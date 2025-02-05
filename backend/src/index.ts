@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 
 import { AppDataSource } from "@databases/data-source";
+import webrouter from "@routers/web.routes";
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ AppDataSource.initialize().then(() => {
   process.exit(1);
 });
 
+app.use("/", webrouter)
 
 app.get('/', (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
