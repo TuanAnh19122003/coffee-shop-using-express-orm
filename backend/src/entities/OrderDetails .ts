@@ -7,12 +7,10 @@ class OrderDetails {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @ManyToOne(() => Order)
-  @JoinColumn({ name: "order_id" })
+  @ManyToOne(() => Order, order => order.orderDetails)
   order?: Order;
 
   @ManyToOne(() => Product)
-  @JoinColumn({ name: "product_id" })
   product?: Product;
 
   @Column({ type: "nvarchar", length: 50 })

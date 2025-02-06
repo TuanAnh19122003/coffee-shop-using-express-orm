@@ -20,7 +20,7 @@ class Feedback {
   @Column({ type: "nvarchar", length: 255 })
   subjectName?: string;
 
-  @Column({ type: "nvarchar", length: 500 })
+  @Column({ length: 500, nullable: true })
   note?: string;
 }
 

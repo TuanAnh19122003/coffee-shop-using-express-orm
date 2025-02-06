@@ -1,19 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
-import Category from "./Category";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import Category from './Category';
+import ProductSize from './ProductSize ';
 
 @Entity({ name: "products" })
 class Product {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @ManyToOne(() => Category)
-  @JoinColumn({ name: "category_id" })
-  category?: Category;
-
-  @Column({ type: "nvarchar", length: 255 })
+  @Column()
   name?: string;
 
-  @Column({ type: "decimal", precision: 10, scale: 2, default: 0 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   discount?: number;
 
   @Column({ type: "nvarchar", length: 255, nullable: true })
@@ -27,6 +24,12 @@ class Product {
 
   @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
   updatedAt?: Date;
+
+  @ManyToOne(() => Category, category => category.products)
+  category?: Category;
+
+  @OneToMany(() => ProductSize, productSize => productSize.product)
+  sizes?: ProductSize[];
 }
 
 export default Product;

@@ -1,41 +1,35 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
-import Role from "./Role";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import Role from './Role'; 
+import Order from './Order';
 
 @Entity({name: "users"})
 class User {
     @PrimaryGeneratedColumn()
     id?: number;
-  
-    @Column({ type: "nvarchar", length: 255, nullable: true })
+
+    @Column({ nullable: true })
     firstName?: string;
-  
-    @Column({ type: "nvarchar", length: 255, nullable: true })
+
+    @Column({ nullable: true })
     lastName?: string;
 
-    @Column({ type: "nvarchar", length: 255, nullable: true })
-    image?: string;
-  
-    @Column({ type: "nvarchar", length: 255, unique: true })
+    @Column({ unique: true })
     email?: string;
-  
-    @Column({ type: "nvarchar", length: 20, nullable: true })
+
+    @Column({ nullable: true })
     phone?: string;
-  
-    @Column({ type: "nvarchar", length: 255, nullable: true })
+
+    @Column({ nullable: true })
     address?: string;
-  
-    @Column({ type: "nvarchar", length: 255, })
+
+    @Column()
     password?: string;
 
-    @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
-    createdAt?: Date;
-  
-    @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
-    updatedAt?: Date;
-  
-    @ManyToOne(() => Role)
-    @JoinColumn({ name: "role_id" })
+    @ManyToOne(() => Role, role => role.users)
     role?: Role;
+
+    @OneToMany(() => Order, order => order.user)
+    orders?: Order[];
 }
 
 export default User;
