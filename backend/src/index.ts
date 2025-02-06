@@ -25,6 +25,7 @@ app.use(session({
 
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
+app.use(express.static('public'));
 
 AppDataSource.initialize().then(() => {
   console.log('Database connected and initialized');
