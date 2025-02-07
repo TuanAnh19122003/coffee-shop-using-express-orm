@@ -2,34 +2,34 @@ import express, { Express, Request,Response, Router } from "express";
 import RoleController from "@controllers/roleController";
 import UserController from "@controllers/userContoller";
 import multer from "multer";
-import path from "path";
 
 const router: Router = express.Router();
+
+function removeVietnameseAccents(str: string): string {
+    return str.normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/đ/g, 'd')
+              .replace(/Đ/g, 'D');
+}
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/uploads/');
     },
     filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        const nameWithoutExt = path.basename(file.originalname, ext);
-        
         const now = new Date();
         const timestamp = now.toISOString().replace(/T/, '_').replace(/\..+/, '').replace(/:/g, '-');
 
-        function removeVietnameseTones(str: string){
-            return str
-                .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .replace(/đ/g, "d").replace(/Đ/g, "D")
-        };
+        let baseName = removeVietnameseAccents(file.originalname);
+        let Name = baseName.replace(/[^0-9a-zA-Z-\s.]/g, '')
+                           .replace(/\s+/g, '-')
+                           .replace(/-+/g, '-')
+                           .replace(/^-+|-+$/g, '');
 
-        // Xử lý tên file
-        let baseName = removeVietnameseTones(nameWithoutExt.toLowerCase());
-
-        cb(null, `${baseName}-${timestamp}${ext}`);
+        cb(null, `${timestamp}-${Name}`);
     },
 });
+
 
 const upload = multer({ 
     storage: storage,

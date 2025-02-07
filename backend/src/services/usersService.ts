@@ -2,6 +2,7 @@ import User from "@entity/User";
 import Role from "@entity/Role";
 import fs from 'fs';
 import path from 'path';
+import bcrypt from 'bcrypt';
 
 import { AppDataSource } from "@databases/data-source";
 const userRepository = AppDataSource.getRepository(User);
@@ -26,11 +27,16 @@ class UserService {
     static async createUser(data: any, file?: Express.Multer.File){
         const { firstName, lastName, email, password, phone, address, roleId } = data;
         const role = await roleRepository.findOne({ where: { id: roleId } });
+
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        //console.log("Mật khẩu đã băm:", hashedPassword);
+
         const user: User = new User()
         user.firstName = firstName;
         user.lastName = lastName;
         user.email = email;
-        user.password = password;
+        user.password = hashedPassword;
         user.phone = phone;
         user.address = address;
         if(role){
@@ -40,7 +46,6 @@ class UserService {
         if(file){
             user.image = `/uploads/${file.filename}`;
         }
-        
         
         return await userRepository.save(user);
     }
@@ -56,13 +61,20 @@ class UserService {
         user.firstName = firstName!== undefined? firstName : user.firstName;
         user.lastName = lastName!== undefined? lastName : user.lastName;
         user.email = email!== undefined? email : user.email;
-        user.password = password!== undefined? password : user.password;
         user.phone = phone!== undefined? phone : user.phone;
         user.address = address!== undefined? address : user.address;
+        
+        if (password !== undefined && password.trim() !== "" && password !== user.password) {
+            const saltRounds = 10;
+            user.password = await bcrypt.hash(password, saltRounds);
+            console.log("Mật khẩu đã được băm:", user.password);
+        }
+        
         const role = await roleRepository.findOne({ where: { id: roleId } });
         if(role){
             user.role = role;
         }
+
         
         if (file) {
             if (user.image) {
