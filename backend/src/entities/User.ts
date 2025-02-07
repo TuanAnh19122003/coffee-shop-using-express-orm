@@ -7,14 +7,17 @@ class User {
     @PrimaryGeneratedColumn()
     id?: number;
 
-    @Column({ nullable: true })
+    @Column({ type: "nvarchar" })
     firstName?: string;
 
-    @Column({ nullable: true })
+    @Column({ type: "nvarchar" })
     lastName?: string;
 
     @Column({ unique: true })
     email?: string;
+    
+    @Column({ type: "nvarchar", length: 255, nullable: true })
+    image?: string;
 
     @Column({ nullable: true })
     phone?: string;

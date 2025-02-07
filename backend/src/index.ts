@@ -15,6 +15,7 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+// app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(session({
   secret: 'mykey',
